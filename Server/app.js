@@ -4,99 +4,179 @@ const app = express();
 const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
-const fs = require('fs').promises;
+const fs = require('fs');
 const OpenAI = require('openai');
-
+const cookieParser = require("cookie-parser");
+const corsOptions=require("./config/corsOptions");
+const credentials=require("./middleware/credentials");
+const verifyJWT=require('./middleware/verifyJWT');
+const verifyRoles=require("./middleware/verifyRoles");
+const ROLES_LIST=require("./config/roles_list");
+const multer = require('multer');
+const csv = require('csv-parser');
+const speech = require('@google-cloud/speech');
 // Environment variables
 const PORT = process.env.PORT || 8080;
-const MONGO_URL = process.env.MONGO_URL || "mongodb://127.0.0.1:27017/AI-Interview-Assistant";
+const MONGO_URL = process.env.MONGO_URL  ;
 
+const dbconnect= async()=>{
+  await mongoose.connect(MONGO_URL)
+  .then(()=>{
+      console.log('connected')
+    }).catch((err)=>{
+      console.log(err)
+    })
+}
 // Initialize OpenAI
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-// Middleware
-app.use(cors({
-  origin: ['http://localhost:5173'], // Add your frontend URL
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true
-}));
+app.use(credentials);
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+
+//routes
+app.use('/register',require('./routes/register'));
+app.use("/login",require('./routes/auth'));
+app.use("/refresh" ,require('./routes/refresh'));
+app.use("/logout" ,require("./routes/logout"));
 
 
-// MongoDB Connection
-const connectDB = async () => {
-  try {
-    await mongoose.connect(MONGO_URL);
-    console.log('Connected to MongoDB');
-  } catch (err) {
-    console.error('MongoDB connection error:', err);
-    process.exit(1);
-  }
-};
 const userProfileRoutes = require('./routes/userProfile');
 app.use('/api/profile', userProfileRoutes);
 // Interview questions data structure
-const interviewQuestions = {
-  technical: {
-    javascript: {
-      initial: [
-        "Can you explain your experience with JavaScript?",
-        "What JavaScript frameworks are you familiar with?",
-        "How do you handle asynchronous operations in JavaScript?"
-      ],
-      followUps: {
-        experience: [
-          "What was the most challenging JavaScript project you worked on?",
-          "How do you stay updated with the latest JavaScript features?",
-          "Can you describe a time when you had to optimize JavaScript code?"
-        ],
-        frameworks: [
-          "What made you choose these frameworks?",
-          "How do you compare different JavaScript frameworks?",
-          "What's your experience with state management in these frameworks?"
-        ]
-      }
-    },
-    webdev: {
-      initial: [
-        "What's your experience with responsive design?",
-        "How do you approach web performance optimization?",
-        "What's your experience with REST APIs?"
-      ],
-      followUps: {
-        design: [
-          "How do you handle different screen sizes?",
-          "What CSS frameworks have you worked with?",
-          "How do you ensure cross-browser compatibility?"
-        ],
-        performance: [
-          "What tools do you use for performance monitoring?",
-          "Can you describe your approach to code splitting?",
-          "How do you optimize asset loading?"
-        ]
-      }
+
+
+// Function to load questions from CSV
+function loadQuestionsFromCSV() {
+  return new Promise((resolve, reject) => {
+    const questions = {};
+
+    fs.createReadStream('interview_questions.csv')
+      .pipe(csv())
+      .on('data', (row) => {
+        const role = row.Category;
+        
+        // Organize questions by role
+        if (!questions[role]) {
+          questions[role] = {
+            easy: [],
+            medium: [],
+            hard: []
+          };
+        }
+
+        // Categorize questions by difficulty
+        switch (row.Difficulty.toLowerCase()) {
+          case 'easy':
+            questions[role].easy.push(row.Question);
+            break;
+          case 'medium':
+            questions[role].medium.push(row.Question);
+            break;
+          case 'hard':
+            questions[role].hard.push(row.Question);
+            break;
+        }
+      })
+      .on('end', () => {
+        resolve(questions);
+      })
+      .on('error', (error) => {
+        reject(error);
+      });
+  });
+}
+
+// Global variable to store loaded questions
+let loadedQuestions = null;
+
+app.post('/api/get-next-question', async (req, res) => {
+  try {
+    // Load questions if not already loaded
+    if (!loadedQuestions) {
+      loadedQuestions = await loadQuestionsFromCSV();
     }
-  },
-  behavioral: {
-    teamwork: {
-      initial: [
-        "How do you prefer to work in a team?",
-        "Describe a successful team project you were part of.",
-        "How do you handle conflicts in a team?"
-      ],
-      followUps: {
-        style: [
-          "How do you communicate with team members?",
-          "What role do you usually take in a team?",
-          "How do you handle disagreements with colleagues?"
-        ]
-      }
+
+    const { lastAnswer, role, questionHistory = [] } = req.body;
+    
+    // Validate role
+    if (!loadedQuestions[role]) {
+      return res.status(400).json({
+        success: false,
+        error: `No questions found for role: ${role}`
+      });
     }
+
+    // If this is the first question
+    if (!lastAnswer || questionHistory.length === 0) {
+      // Randomly select difficulty levels with a bias towards easier questions
+      const difficultyLevels = ['easy', 'easy', 'easy', 'medium', 'medium', 'hard'];
+      const randomDifficulty = difficultyLevels[Math.floor(Math.random() * difficultyLevels.length)];
+      
+      const roleQuestions = loadedQuestions[role][randomDifficulty];
+      
+      // Ensure we don't repeat questions
+      const availableQuestions = roleQuestions.filter(q => !questionHistory.includes(q));
+      
+      if (availableQuestions.length === 0) {
+        return res.status(404).json({
+          success: false,
+          error: 'No more unique questions available'
+        });
+      }
+
+      const question = availableQuestions[Math.floor(Math.random() * availableQuestions.length)];
+      
+      return res.json({
+        success: true,
+        question,
+        metadata: { 
+          role, 
+          difficulty: randomDifficulty 
+        }
+      });
+    }
+
+    // Logic for follow-up questions can be added here if needed
+    // For now, we'll just generate another random question
+    const difficultyLevels = ['easy', 'easy', 'easy', 'medium', 'medium', 'hard'];
+    const randomDifficulty = difficultyLevels[Math.floor(Math.random() * difficultyLevels.length)];
+    
+    const roleQuestions = loadedQuestions[role][randomDifficulty];
+    
+    // Ensure we don't repeat questions
+    const availableQuestions = roleQuestions.filter(q => !questionHistory.includes(q));
+    
+    if (availableQuestions.length === 0) {
+      return res.status(404).json({
+        success: false,
+        error: 'No more unique questions available'
+      });
+    }
+
+    const question = availableQuestions[Math.floor(Math.random() * availableQuestions.length)];
+    
+    return res.json({
+      success: true,
+      question,
+      metadata: { 
+        role, 
+        difficulty: randomDifficulty 
+      }
+    });
+
+  } catch (error) {
+    console.error('Error generating question:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to generate interview question'
+    });
   }
-};
+});
 
 // Helper function to analyze answers
 function analyzeAnswer(answer) {
@@ -143,6 +223,7 @@ function analyzeAnswer(answer) {
 }
 
 // API Endpoints
+app.use('/interview',require('./routes/interview'));
 
 // Test endpoint
 app.get('/api/test', (req, res) => {
@@ -150,109 +231,100 @@ app.get('/api/test', (req, res) => {
 });
 
 // Save transcript endpoint
-app.post('/api/save-transcript', async (req, res) => {
+const upload = multer({ storage: multer.memoryStorage() });
+const client = new speech.SpeechClient();
+
+app.post('/api/transcribe', upload.single('audio'), async (req, res) => {
   try {
-    const { conversation } = req.body;
-    const transcript = conversation.map(entry => 
-      `Q: ${entry.question}\nA: ${entry.answer}\n`
-    ).join('\n');
+    const audioBytes = req.file.buffer.toString('base64');
+    const request = {
+      audio: { content: audioBytes },
+      config: {
+        encoding: 'WEBM_OPUS',
+        sampleRateHertz: 16000,
+        languageCode: 'en-US',
+      },
+    };
 
-    const transcriptsDir = path.join(__dirname, 'transcripts');
-    await fs.mkdir(transcriptsDir, { recursive: true });
-
-    // Always append to the same file
-    const filePath = path.join(transcriptsDir, 'interview_transcript.txt');
-    
-    // Add timestamp and separator before new entries
-    const timestampedTranscript = `\n--- Interview Session ${new Date().toISOString()} ---\n${transcript}`;
-    
-    await fs.appendFile(filePath, timestampedTranscript, 'utf8');
-
-    res.status(200).json({ 
-      success: true,
-      timestamp: new Date().toISOString()
-    });
+    const [response] = await client.recognize(request);
+    const transcript = response.results.map((result) => result.alternatives[0].transcript).join('\n');
+    res.json({ transcript });
   } catch (error) {
-    console.error('Error saving transcript:', error);
-    res.status(500).json({ 
-      success: false,
-      error: error.message,
-      timestamp: new Date().toISOString()
-    });
+    console.error('Error transcribing audio:', error);
+    res.status(500).send('Failed to transcribe audio.');
   }
 });
-
 // Get next question endpoint
-app.post('/api/get-next-question', async (req, res) => {
-  try {
-    const { lastAnswer, questionHistory = [] } = req.body;
+// app.post('/api/get-next-question', async (req, res) => {
+//   try {
+//     const { lastAnswer, questionHistory = [] } = req.body;
     
-    // If this is the first question
-    if (!lastAnswer || questionHistory.length === 0) {
-      const categories = Object.keys(interviewQuestions);
-      const randomCategory = categories[Math.floor(Math.random() * categories.length)];
-      const subcategories = Object.keys(interviewQuestions[randomCategory]);
-      const randomSubcategory = subcategories[Math.floor(Math.random() * subcategories.length)];
-      const initialQuestions = interviewQuestions[randomCategory][randomSubcategory].initial;
-      const question = initialQuestions[Math.floor(Math.random() * initialQuestions.length)];
+//     // If this is the first question
+//     if (!lastAnswer || questionHistory.length === 0) {
+//       const categories = Object.keys(interviewQuestions);
+//       const randomCategory = categories[Math.floor(Math.random() * categories.length)];
+//       const subcategories = Object.keys(interviewQuestions[randomCategory]);
+//       const randomSubcategory = subcategories[Math.floor(Math.random() * subcategories.length)];
+//       const initialQuestions = interviewQuestions[randomCategory][randomSubcategory].initial;
+//       const question = initialQuestions[Math.floor(Math.random() * initialQuestions.length)];
       
-      return res.json({
-        success: true,
-        question,
-        metadata: { category: randomCategory, subcategory: randomSubcategory }
-      });
-    }
+//       return res.json({
+//         success: true,
+//         question,
+//         metadata: { category: randomCategory, subcategory: randomSubcategory }
+//       });
+//     }
     
-    // Analyze the last answer
-    const analysis = analyzeAnswer(lastAnswer);
+//     // Analyze the last answer
+//     const analysis = analyzeAnswer(lastAnswer);
     
-    // Get follow-up questions for the analyzed category
-    const followUps = interviewQuestions[analysis.category][analysis.subcategory].followUps;
-    const followUpTypes = Object.keys(followUps);
-    const randomType = followUpTypes[Math.floor(Math.random() * followUpTypes.length)];
-    const possibleQuestions = followUps[randomType];
+//     // Get follow-up questions for the analyzed category
+//     const followUps = interviewQuestions[analysis.category][analysis.subcategory].followUps;
+//     const followUpTypes = Object.keys(followUps);
+//     const randomType = followUpTypes[Math.floor(Math.random() * followUpTypes.length)];
+//     const possibleQuestions = followUps[randomType];
     
-    // Filter out questions that have already been asked
-    const newQuestions = possibleQuestions.filter(q => !questionHistory.includes(q));
+//     // Filter out questions that have already been asked
+//     const newQuestions = possibleQuestions.filter(q => !questionHistory.includes(q));
     
-    // If all follow-ups have been used, select a new initial question
-    if (newQuestions.length === 0) {
-      const categories = Object.keys(interviewQuestions);
-      const randomCategory = categories[Math.floor(Math.random() * categories.length)];
-      const subcategories = Object.keys(interviewQuestions[randomCategory]);
-      const randomSubcategory = subcategories[Math.floor(Math.random() * subcategories.length)];
-      const initialQuestions = interviewQuestions[randomCategory][randomSubcategory].initial;
-      const question = initialQuestions[Math.floor(Math.random() * initialQuestions.length)];
+//     // If all follow-ups have been used, select a new initial question
+//     if (newQuestions.length === 0) {
+//       const categories = Object.keys(interviewQuestions);
+//       const randomCategory = categories[Math.floor(Math.random() * categories.length)];
+//       const subcategories = Object.keys(interviewQuestions[randomCategory]);
+//       const randomSubcategory = subcategories[Math.floor(Math.random() * subcategories.length)];
+//       const initialQuestions = interviewQuestions[randomCategory][randomSubcategory].initial;
+//       const question = initialQuestions[Math.floor(Math.random() * initialQuestions.length)];
       
-      return res.json({
-        success: true,
-        question,
-        metadata: { category: randomCategory, subcategory: randomSubcategory, type: 'new_topic' }
-      });
-    }
+//       return res.json({
+//         success: true,
+//         question,
+//         metadata: { category: randomCategory, subcategory: randomSubcategory, type: 'new_topic' }
+//       });
+//     }
     
-    // Select a random new question
-    const question = newQuestions[Math.floor(Math.random() * newQuestions.length)];
+//     // Select a random new question
+//     const question = newQuestions[Math.floor(Math.random() * newQuestions.length)];
     
-    res.json({
-      success: true,
-      question,
-      metadata: { 
-        category: analysis.category, 
-        subcategory: analysis.subcategory,
-        type: 'follow_up'
-      }
-    });
+//     res.json({
+//       success: true,
+//       question,
+//       metadata: { 
+//         category: analysis.category, 
+//         subcategory: analysis.subcategory,
+//         type: 'follow_up'
+//       }
+//     });
     
-  } catch (error) {
-    console.error('Error getting next question:', error);
-    res.status(500).json({
-      success: false,
-      error: error.message,
-      timestamp: new Date().toISOString()
-    });
-  }
-});
+//   } catch (error) {
+//     console.error('Error getting next question:', error);
+//     res.status(500).json({
+//       success: false,
+//       error: error.message,
+//       timestamp: new Date().toISOString()
+//     });
+//   }
+// });
 
 // Test OpenAI connectivity
 app.get('/api/test-openai', async (req, res) => {
@@ -286,14 +358,12 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Start server
-connectDB().then(() => {
-  app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-  });
-}).catch(err => {
-  console.error("Failed to start server:", err);
-  process.exit(1);
-});
+app.use(verifyJWT);
+app.use('/users',require('./routes/user'));
+
+app.listen(PORT,()=>{
+  console.log("Server is running on Port",PORT);
+  dbconnect();
+})
 
 module.exports = app;

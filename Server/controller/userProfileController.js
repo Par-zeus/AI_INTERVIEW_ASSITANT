@@ -22,8 +22,11 @@ createUploadsDirectory();
 const skillToRoleMapping = {
   'javascript': ['Software Engineer', 'Full Stack Developer'],
   'python': ['Software Engineer', 'Data Scientist'],
+  'html': ['Software Engineer', 'Frontend Developer'],
+  'css': ['Software Engineer', 'Frontend Developer'],
   'react': ['Software Engineer', 'Frontend Developer'],
   'node': ['Software Engineer', 'Backend Developer'],
+  'express': ['Software Engineer', 'Backend Developer'],
   'machine learning': ['Data Scientist', 'ML Engineer'],
   'statistics': ['Data Scientist', 'Data Analyst'],
   'sql': ['Data Scientist', 'Data Engineer'],
@@ -63,7 +66,10 @@ const createOrUpdateProfile = async (req, res) => {
       const roles = skillToRoleMapping[skill] || [];
       roles.forEach(role => recommendedRoles.add(role));
     });
-
+    console.log(recommendedRoles.size);
+    if(recommendedRoles.size==0){
+      recommendedRoles.add("Software Engineer");
+    }
     // Check if user exists
     let user = await User.findOne({ email });
     

@@ -3,7 +3,7 @@ import axios from '../api/axios';
 export const interviewService = {
   async getNextQuestion(lastAnswer, role, conversationHistory) {
     try {
-      const response = await axios.post('http://localhost:8080/api/get-next-question', {
+      const response = await axios.post('/api/get-next-question', {
         lastAnswer,
         role,
         questionHistory: conversationHistory.map(item => item.question)
@@ -14,11 +14,15 @@ export const interviewService = {
     }
   },
 
-  async saveTranscript(conversationData) {
+  async saveTranscript({conversationData,email}) {
+    if (!Array.isArray(conversationData) || conversationData.length === 0) {
+      throw new Error('Invalid conversation data');
+    }
     try {
-      const response = await axios.post('http://localhost:8080/api/save-transcript', {
+      const response = await axios.post('/interview/save-transcript', {
         conversation: conversationData,
-        timestamp: new Date().toISOString()
+        email:email,
+        timestamp: new Date().toISOString(),
       });
       return response.data;
     } catch (error) {

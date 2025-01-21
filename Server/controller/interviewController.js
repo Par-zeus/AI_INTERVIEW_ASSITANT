@@ -1,17 +1,38 @@
-const Interview = require('../models/Interview');
-const { interviewQuestions } = require('../data/questions');
-const { analyzeAnswer } = require('../utils/analyzer');
+const Interview = require('../model/inteview');
+const User =require('../model/user');
+const path = require('path');
+const fs = require('fs').promises;
+// const { interviewQuestions } = require('../data/questions');
+// const { analyzeAnswer } = require('../utils/analyzer');
 
 const saveTranscript = async (req, res)=> {
     try {
-      const conversation = req.body;
+      // console.log(req.body);
+      const {conversation,email} = req.body;
+      const user=await User.findOne({email:email})
+      const transcript = conversation.map(entry => 
+        `Q: ${entry.question}\nA: ${entry.answer}\n`
+      ).join('\n');
       
+      const transcriptsDir = path.join(__dirname, '../transcripts');
+      await fs.mkdir(transcriptsDir, { recursive: true });
+  
+      // Always append to the same file
+      const filePath = path.join(transcriptsDir, 'interview_transcript.txt');
+      
+      // Add timestamp and separator before new entries
+      const timestampedTranscript = `\n--- Interview Session ${new Date().toISOString()} ---\n${transcript}`;
+      
+      await fs.appendFile(filePath, timestampedTranscript, 'utf8');
+      
+      console.log(user);
       const interview = new Interview({
         role: conversation[0]?.role || 'general',
         conversation: conversation.map(entry => ({
           question: entry.question,
           answer: entry.answer
-        }))
+        })),
+        userId:user._id
       });
 
       await interview.save();

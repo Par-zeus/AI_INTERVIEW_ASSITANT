@@ -1,13 +1,14 @@
 // src/components/UserProfileDropdown.jsx
 import React, { useState } from 'react';
 import { User, Settings, LogOut, ChevronDown, Award } from 'lucide-react';
+import useLogout from '../../hooks/useLogout';
 
 const UserProfileDropdown = ({ onNavigate }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const logout =useLogout();
 
-  const handleLogout = () => {
-    localStorage.removeItem('isLoggedIn');
-    onNavigate('/login');
+  const handleLogout = async() => {
+    await logout().then( onNavigate('/login'));
   };
 
   return (

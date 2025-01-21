@@ -13,7 +13,7 @@ const RoleSelection = () => {
   useEffect(() => {
     // Get recommended roles from localStorage
     const recommendedRoles = JSON.parse(localStorage.getItem('recommendedRoles') || '[]');
-    
+    console.log(recommendedRoles);
     // Map recommended roles to the full role objects with icons and descriptions
     const roleMapping = {
       'Software Engineer': {

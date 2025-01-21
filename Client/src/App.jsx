@@ -13,23 +13,35 @@ import SignUp from './components/SignIn/SignUp';
 import Settings from './components/pages/Settings';
 import Progress from './components/pages/Progress';
 import InterviewPage from './components/pages/Interview Conduction/InterviewPage'; 
+import Unauthorized from './components/SignIn/Unauthorized';
+import RequireAuth from './components/SignIn/RequireAuth';
+import PersistLogin from './components/SignIn/PersistLogin';
 
+const Roles={
+  'User':2001,
+  'Admin':5150
+}
 const App = () => {
   return (
     <Router>
       <Layout>
         <Routes>
           <Route path="/" element={<LandingPage />} />
-          <Route path="/user-profile" element={<UserProfile />} />
-          <Route path="/role-selection" element={<RoleSelection />} />
-          <Route path="/interview" element={<InterviewPage />} />
-          <Route path="/interview/mode/:role" element={<InterviewModeSelection />} />
-          <Route path="/interview/:mode/:role" element={<OralInterview />} />
-          <Route path="/transcript" element={<TranscriptAnalysis />} />
+          <Route path='/unauthorized' element={<Unauthorized/>} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/settings" element={<Settings />} />
-          <Route path="/progress" element={<Progress />} />
+          <Route element={<PersistLogin/>}>
+              <Route element={<RequireAuth allowedRoles={[Roles.User,Roles.Admin]}/>}>
+                  <Route path="/user-profile" element={<UserProfile />} />
+                  <Route path="/role-selection" element={<RoleSelection />} />
+                  <Route path="/interview" element={<InterviewPage />} />
+                  <Route path="/interview/mode/:role" element={<InterviewModeSelection />} />
+                  <Route path="/interview/:mode/:role" element={<OralInterview />} />
+                  <Route path="/transcript" element={<TranscriptAnalysis />} />
+                  <Route path="/progress" element={<Progress />} />
+              </Route>
+          </Route>
         </Routes>
       </Layout>
     </Router>

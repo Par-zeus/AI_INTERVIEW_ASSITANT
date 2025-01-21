@@ -3,9 +3,10 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Mic, MicOff, Save, Loader2 } from 'lucide-react';
 import { interviewService } from '../../../services/interviewService';
-
+import useAuth from '../../../hooks/useAuth';
 const OralInterview = () => {
   const { role } = useParams();
+  const {auth} =useAuth();
   const navigate = useNavigate();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [responses, setResponses] = useState([]);
@@ -87,7 +88,7 @@ const OralInterview = () => {
   };
   const saveTranscript = async (conversationData) => {
     try {
-      const response = await interviewService.saveTranscript(conversationData);
+      const response = await interviewService.saveTranscript({conversationData,email:auth.email});
       return response;
     } catch (error) {
       console.error('Error saving transcript:', error);
@@ -118,14 +119,16 @@ const OralInterview = () => {
       setConversationHistory(newHistory);
   
       // Save transcript to backend
-      await saveTranscript(newHistory);
+      // await saveTranscript(newHistory);
   
       // Save locally
       localStorage.setItem('interviewResponses', JSON.stringify(newHistory));
-  
-      if (currentQuestionIndex >= 3) {
+      console.log(currentQuestionIndex);
+      if (currentQuestionIndex == 4) {
+        
+      await saveTranscript(newHistory);
         setIsInterviewComplete(true);
-        return;
+        navigate("/transcript");
       }
   
       const nextQuestion = await getNextQuestion(transcript);
@@ -133,6 +136,7 @@ const OralInterview = () => {
       setTranscript('');
       setCurrentQuestionIndex((prev) => prev + 1);
     } catch (err) {
+      console.log(err);
       setError('Failed to proceed to next question. Please try again.');
     }
   };

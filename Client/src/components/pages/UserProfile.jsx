@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axiosInstance from '../../api/axios';
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import useAuth from '../../hooks/useAuth';
 
 const UserProfile = () => {
   const navigate = useNavigate();
+  const axiosPrivate=useAxiosPrivate();
+  const {auth} =useAuth();
   const [formData, setFormData] = useState({
     fullName: '',
-    email: '',
+    email: auth.email,
     phone: '',
     experience: '',
     education: '',
@@ -38,13 +41,16 @@ const UserProfile = () => {
       Object.keys(formData).forEach(key => {
         formDataToSend.append(key, formData[key]);
       });
-
-      const response = await axiosInstance.post('/api/profile/profile', formDataToSend, {
+      console.log(formData);
+      const finalFormData ={
+        ...formData
+      }
+      const response = await axiosPrivate.put(`/users/${auth.email}`, finalFormData, {
         headers: {
-          'Content-Type': 'multipart/form-data',
+          'Content-Type': 'application/json',
         },
       });
-
+      console.log(response);
       // Store recommended roles in localStorage
       localStorage.setItem('recommendedRoles', JSON.stringify(response.data.recommendedRoles));
       
