@@ -71,75 +71,82 @@ const createUploadsDirectory = () => {
   };
   
   
-const updateUser=async(req,res)=>{
-    try { 
-      console.log("sonu")
-      const {
-        fullName,
-        email,
-        phone,
-        experience,
-        education,
-        skills,
-        linkedIn,
-      } = req.body;
-      console.log(req.body);
-      let resumePath = null;
-      if (req.file) {
-        resumePath = `/uploads/resumes/${req.file.filename}`;
-      }
-  
-      // Generate recommended roles based on skills
-      const userSkills = skills?.toLowerCase().split(',').map(skill => skill.trim()) || [];
-      const recommendedRoles = new Set();
-  
-      userSkills.forEach(skill => {
-        const roles = skillToRoleMapping[skill] || [];
-        roles.forEach(role => recommendedRoles.add(role));
-      });
-      console.log(recommendedRoles.size);
-      if(recommendedRoles.size==0){
-        recommendedRoles.add("Software Engineer");
-      }
-      // Check if user exists
-      let user = await User.findOne({ email });
-      
-      if (user) {
-        // Update existing user
-        user = await User.findOneAndUpdate(
-          { email },
-          {
-            fullName,
-            phone,
-            experience,
-            education,
-            skills,
-            linkedIn,
-            resume: resumePath
-          },
-          { new: true }
-        );
-      }
-      res.status(200).json({
-        message: 'Profile updated successfully',
-        user: {
-          fullName: user.fullName,
-          email: user.email,
-          phone: user.phone,
-          experience: user.experience,
-          education: user.education,
-          skills: user.skills,
-          linkedIn: user.linkedIn,
-          resume: user.resume
-        },
-        recommendedRoles: Array.from(recommendedRoles)
-      });
-    } catch (error) {
-      console.log(error);
-        res.status(500).json("Upadation not done")
-    }
-}
+  const cloudinary = require('cloudinary').v2;
 
+  // Configure Cloudinary
+  cloudinary.config({
+    cloud_name: process.env.cloud_name,
+    api_key: process.env.api_key,
+    api_secret: process.env.api_secret,
+  });
+  
+  // Update user function
+const updateUser = async (req, res) => {
+  try {
+    console.log("Received Body:", req.body);
+    console.log("Received File:", req.file);
+
+    // ✅ Extract fields correctly
+    const { email } = req.params;
+    const { fullName, phone, experience, education, skills, linkedIn,suggestedRole,improvements } = req.body;
+
+    let resumeUrl = null;
+
+    // ✅ Ensure the uploaded file is handled
+    if (req.file) {
+      const filePath = req.file.path;
+      const uploadResponse = await cloudinary.uploader.upload(filePath, { folder: "resumes" });
+      resumeUrl = uploadResponse.secure_url;
+    }
+    // Generate recommended roles based on skills
+    const userSkills = skills?.toLowerCase().split(',').map(skill => skill.trim()) || [];
+    const recommendedRoles = new Set();
+
+    userSkills.forEach(skill => {
+      const roles = skillToRoleMapping[skill] || [];
+      roles.forEach(role => recommendedRoles.add(role));
+    });
+    console.log(recommendedRoles.size);
+    if (recommendedRoles.size == 0) {
+      recommendedRoles.add("Software Engineer");
+    }
+    recommendedRoles.add(suggestedRole);
+
+    // ✅ Find and update the user
+    let user = await User.findOneAndUpdate(
+      { email },
+      { fullName, phone, experience, education, skills, linkedIn, resume: resumeUrl,suggestedRole,improvements },
+      { new: true }
+    );
+
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    // res.status(200).json({
+    //   message: "Profile updated successfully",
+    //   user,
+      
+    // });
+    res.status(200).json({
+      message: 'Profile updated successfully',
+      user: {
+        fullName: user.fullName,
+        email: user.email,
+        phone: user.phone,
+        experience: user.experience,
+        education: user.education,
+        skills: user.skills,
+        linkedIn: user.linkedIn,
+        resume: user.resume,
+      },
+      recommendedRoles: Array.from(recommendedRoles),
+    });
+  } catch (error) {
+    console.error("Update Error:", error);
+    res.status(500).json({ message: "Update failed", error: error.message });
+  }
+};
+
+  
 module.exports={
     getAllUser,delUser,updateUser,getUser
 }

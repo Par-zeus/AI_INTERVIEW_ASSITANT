@@ -16,7 +16,7 @@ const handleLogin= async(req,res)=>{
     //evaluate password
     const match= await bcrypt.compare(password, foundUser.password)
         if(match){
-            const roles=Object.values(foundUser.roles).filter(Boolean);
+            const roles=foundUser.roles;
             //create JWTs
             const accessToken=jwt.sign(
                 {
@@ -51,7 +51,7 @@ const handleLogin= async(req,res)=>{
              res.cookie('jwt',newRefreshToken,{httpOnly:true,sameSite:'None',secure:true,maxAge:24*60*60*1000})
              
              //Send Access Token and Roles to user
-             res.json({email:foundUser.email, roles , accessToken});
+             res.json({email:foundUser.email, roles:(roles==5000)?'Interviewer':'Interviewee' , accessToken,username:foundUser.username});
             
         }else{
             return res.sendStatus(401);

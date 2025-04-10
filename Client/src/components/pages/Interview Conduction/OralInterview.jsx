@@ -117,31 +117,45 @@ const OralInterview = () => {
         { question: currentQuestion, answer: transcript },
       ];
       setConversationHistory(newHistory);
-  
-      // Save transcript to backend
-      // await saveTranscript(newHistory);
-  
-      // Save locally
       localStorage.setItem('interviewResponses', JSON.stringify(newHistory));
-      console.log(currentQuestionIndex);
-      if (currentQuestionIndex == 4) {
-        
-      await saveTranscript(newHistory);
+  
+      if (currentQuestionIndex === 4) {
+        await saveTranscript(newHistory);
         setIsInterviewComplete(true);
         navigate("/transcript");
+        return;
       }
   
-      const nextQuestion = await getNextQuestion(transcript);
-      setCurrentQuestion(nextQuestion);
+      let nextQuestion;
+      // Handle first two questions with predefined questions
+      if (currentQuestionIndex === 0) {
+        nextQuestion = {
+          questionText: "What are your strengths and weaknesses?"
+        };
+      } else if (currentQuestionIndex === 1) {
+        nextQuestion = {
+          questionText: "Where do you see yourself in 5 years?"
+        };
+      } else {
+        // For subsequent questions, fetch from API
+        const response = await getNextQuestion(transcript);
+        nextQuestion = response;
+      }
+  
+      if (!nextQuestion || !nextQuestion.questionText) {
+        throw new Error("No valid question received");
+      }
+  
+      setCurrentQuestion(nextQuestion.questionText);
       setTranscript('');
       setCurrentQuestionIndex((prev) => prev + 1);
     } catch (err) {
-      console.log(err);
-      setError('Failed to proceed to next question. Please try again.');
+      console.error("Error fetching next question:", err);
+      setError("Failed to proceed to the next question. Please try again.");
     }
   };
   
-
+  
   if (error) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">

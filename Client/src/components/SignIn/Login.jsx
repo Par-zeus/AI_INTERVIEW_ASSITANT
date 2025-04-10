@@ -35,11 +35,16 @@ const Login = () => {
       const email1 = response?.data?.email;
       const accessToken = response?.data?.accessToken;
       const roles=response?.data?.roles;
+      const userName=response?.data?.username;
 
-      setAuthInfo({ accessToken }, email1 ,roles);
+      setAuthInfo({ accessToken }, email1 ,roles,userName);
       setEmail('');
       setPwd('');
-      navigate(from,{replace:true});
+      if(roles=="Interviewer"){
+        navigate("/dashboard");
+      }else{
+        navigate("/");
+      }
     } catch (err) {
         console.log(err);
       if (!err?.response) {

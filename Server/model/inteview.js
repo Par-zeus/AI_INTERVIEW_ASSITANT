@@ -11,7 +11,17 @@ const interviewSchema = new mongoose.Schema({
         required: true
   },
   conversation: [{
-    question: String,
+    question: {
+      text: {
+        type: String,
+        required: true
+      },
+      questionId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'PracticeQuestion',
+        required: false  // Make it optional
+      }
+    },
     answer: String,
     timestamp: {
       type: Date,

@@ -1,5 +1,5 @@
 import React from 'react';
-import InterviewScheduler from './InterviewScheduler'; // Scheduler component
+
 
 const InterviewPage = () => {
   return (
@@ -10,7 +10,6 @@ const InterviewPage = () => {
           Welcome to the Interview section. You can schedule an interview using
           the form below or explore other interview-related resources.
         </p>
-        <InterviewScheduler />
       </div>
     </div>
   );

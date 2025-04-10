@@ -28,23 +28,15 @@ const userSchema=new Schema({
         type:String,
         // required:true,
         unique:true,
-        validate(value){
-            if(!validator.isEmail(value)){
-                throw new error("Invalid e-mail id")
-            }
-        }
+       
     },
     roles: {
-        User: {
-            type: Number,
-            default: 2001
-        },
-        Admin: Number
+        type:Number
     },
     linkedIn:{
       type:String,
       // required:true,
-      unique:true,
+    //   unique:true,
     },
     experience:{
       type:String,
@@ -64,6 +56,12 @@ const userSchema=new Schema({
     skills:{
       type:String
     },
+    suggestedRole:{
+        type:String
+    },
+    improvements:[
+        String
+    ],
     
 
     refreshToken:[String]      

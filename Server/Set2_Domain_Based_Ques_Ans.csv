@@ -1,0 +1,181 @@
+Question No.,Question,Answer,Category,Difficulty
+1,What is the software development lifecycle (SDLC)?,"SDLC is a process for planning, developing, testing, and deploying software systematically.",Software Engineer,Easy
+2,What is the difference between functional and non-functional requirements?,"Functional requirements define what the system does, while non-functional requirements define how it performs.",Software Engineer,Easy
+3,What is a design pattern in software engineering?,A design pattern is a reusable solution to a common software design problem.,Software Engineer,Easy
+4,What is version control?,"Version control is the management of changes to code, documents, and other data.",Software Engineer,Easy
+5,What are Agile and Scrum methodologies?,"Agile is a software development methodology emphasizing flexibility, while Scrum is a framework for implementing Agile.",Software Engineer,Easy
+6,What is the purpose of unit testing?,Unit testing verifies that individual components of a program work as intended.,Software Engineer,Medium
+7,"What is refactoring, and why is it important?","Refactoring is improving the structure of code without altering its functionality, enhancing readability and maintainability.",Software Engineer,Medium
+8,What is the difference between a process and a thread?,"A process is an independent program instance, while a thread is a lightweight process within it.",Software Engineer,Medium
+9,"What is a REST API, and how does it work?",A REST API uses HTTP methods to enable communication between clients and servers for CRUD operations.,Software Engineer,Medium
+10,What is a microservices architecture?,Microservices architecture organizes an application as a collection of loosely coupled services.,Software Engineer,Medium
+11,Explain the differences between imperative and declarative programming.,"Imperative specifies ""how"" to achieve results, while declarative specifies ""what"" to achieve.",Software Engineer,Medium
+12,What is pair programming?,"Pair programming involves two developers working together, one writing code and the other reviewing it.",Software Engineer,Medium
+13,"What is a memory leak, and how do you prevent it?",A memory leak occurs when unused memory is not released; prevention includes proper garbage collection and closing resources.,Software Engineer,Hard
+14,What are the principles of object-oriented programming (OOP)?,"Encapsulation, Abstraction, Inheritance, and Polymorphism.",Software Engineer,Hard
+15,What is polymorphism in OOP?,Polymorphism allows objects of different classes to be treated as instances of the same class.,Software Engineer,Hard
+16,"What is a deadlock, and how can it be resolved?",A deadlock occurs when two processes wait indefinitely for resources. Solutions include resource hierarchy or timeout methods.,Software Engineer,Hard
+17,What is continuous integration (CI)?,CI is the practice of merging all developers' working copies to a shared branch frequently.,Software Engineer,Hard
+18,What is the difference between synchronous and asynchronous programming?,"Synchronous operations block execution, while asynchronous operations allow execution to continue.",Software Engineer,Hard
+19,How does garbage collection work in Java?,Garbage collection in Java automatically deallocates memory for unused objects.,Software Engineer,Hard
+20,What is the CAP theorem in distributed systems?,"CAP states that a distributed system cannot simultaneously guarantee Consistency, Availability, and Partition tolerance.",Software Engineer,Hard
+21,What is data science?,"Data science is the study of data using statistical, mathematical, and computational techniques.",Data Scientist,Easy
+22,What is the role of a data scientist?,"A data scientist analyzes data to extract insights, build models, and guide decision-making.",Data Scientist,Easy
+23,What is the difference between supervised and unsupervised learning?,Supervised learning uses labeled data; unsupervised finds patterns in unlabeled data.,Data Scientist,Easy
+24,What are the steps in a typical data science workflow?,"Steps include data collection, cleaning, exploration, modeling, and visualization.",Data Scientist,Easy
+25,"What is the difference between mean, median, and mode?","Mean is the average, median is the middle value, and mode is the most frequent value.",Data Scientist,Easy
+26,"What is overfitting, and how can it be avoided?",Overfitting occurs when a model performs well on training data but poorly on test data.,Data Scientist,Medium
+27,What is a confusion matrix?,A confusion matrix evaluates classification performance using metrics like true positives and negatives.,Data Scientist,Medium
+28,What is the purpose of feature scaling?,Feature scaling standardizes data to ensure all features contribute equally to the model.,Data Scientist,Medium
+29,"What is cross-validation, and why is it used?",Cross-validation splits data into training and testing sets for robust model evaluation.,Data Scientist,Medium
+30,What is a p-value in statistics?,A p-value measures the probability that an observed result occurred by chance.,Data Scientist,Medium
+31,What is the difference between correlation and causation?,Correlation is a relationship between variables; causation implies one variable affects another.,Data Scientist,Medium
+32,What is the purpose of dimensionality reduction?,Dimensionality reduction reduces the number of features while retaining essential information.,Data Scientist,Hard
+33,What is regularization in machine learning?,Regularization prevents overfitting by adding a penalty term to the loss function.,Data Scientist,Hard
+34,What is the Central Limit Theorem?,It states that the sampling distribution of the mean approaches a normal distribution as sample size increases.,Data Scientist,Hard
+35,What is the difference between precision and recall?,Precision measures accuracy of positive predictions; recall measures how many actual positives are identified.,Data Scientist,Hard
+36,What is a time series analysis?,Time series analysis examines data points collected over time to identify trends and patterns.,Data Scientist,Hard
+37,What is a neural network?,A neural network is a machine learning model inspired by the structure of the human brain.,Data Scientist,Hard
+38,What is clustering in data science?,Clustering is an unsupervised technique that groups similar data points together.,Data Scientist,Hard
+39,What is the purpose of A/B testing?,A/B testing compares two versions of a product to determine which performs better.,Data Scientist,Hard
+40,How do you handle missing data?,"Techniques include imputation, removing affected rows/columns, or using algorithms that handle missing data.",Data Scientist,Hard
+42,What is the role of a Product Manager?,"A Product Manager oversees the development, launch, and lifecycle of a product.",Product Manager,Easy
+43,What is the difference between a Product Manager and a Project Manager?,Product Managers focus on product vision; Project Managers focus on execution and timelines.,Product Manager,Easy
+44,What is a product roadmap?,"A product roadmap outlines the vision, goals, and timeline for a product's development.",Product Manager,Easy
+45,What is MVP in product management?,MVP (Minimum Viable Product) is the simplest version of a product with core features for testing.,Product Manager,Easy
+46,What is user research?,"User research gathers insights about users' needs, behaviors, and pain points.",Product Manager,Easy
+47,What is a product lifecycle?,"A product lifecycle includes stages like introduction, growth, maturity, and decline.",Product Manager,Medium
+48,What is the purpose of OKRs in product management?,OKRs (Objectives and Key Results) help track product goals and measure success.,Product Manager,Medium
+49,What are the key metrics for product success?,"Metrics include user engagement, retention, churn rate, and Net Promoter Score (NPS).",Product Manager,Medium
+50,What is Agile methodology?,Agile is an iterative approach to product development focusing on collaboration and flexibility.,Product Manager,Medium
+51,What is the difference between qualitative and quantitative data?,Qualitative data focuses on insights; quantitative data is numeric and measurable.,Product Manager,Medium
+52,"What is a user persona, and why is it important?",A user persona is a fictional representation of a target user to guide product decisions.,Product Manager,Medium
+53,How do you prioritize features in product development?,"Using frameworks like MoSCoW, RICE, or Weighted Scoring.",Product Manager,Hard
+54,What is the purpose of A/B testing in product management?,A/B testing evaluates the impact of changes by comparing two versions of a product.,Product Manager,Hard
+55,How do you manage competing stakeholder priorities?,By aligning with product goals and negotiating trade-offs.,Product Manager,Hard
+56,What is a product backlog?,A product backlog is a prioritized list of features and tasks for future development.,Product Manager,Hard
+57,What is the difference between B2B and B2C products?,B2B products serve businesses; B2C products serve individual consumers.,Product Manager,Hard
+58,How do you define a product's target market?,"By analyzing customer demographics, needs, and competition.",Product Manager,Hard
+59,What is the role of data in product decision-making?,"Data drives decisions by identifying trends, validating ideas, and measuring success.",Product Manager,Hard
+60,How do you handle product failure?,"By analyzing feedback, identifying root causes, and iterating based on insights.",Product Manager,Hard
+61,What is the importance of cross-functional teams?,Cross-functional teams foster collaboration and align product vision with execution.,Product Manager,Hard
+62,What is UX design?,UX design focuses on creating meaningful and satisfying user experiences with a product.,UX Designer,Easy
+63,"What are wireframes, and why are they important?",Wireframes are skeletal designs that outline layouts and functionalities of interfaces.,UX Designer,Easy
+64,What is user research?,User research gathers insights about user needs and behaviors to inform design decisions.,UX Designer,Easy
+65,What is a user persona?,A user persona is a fictional representation of a target user's characteristics and goals.,UX Designer,Easy
+66,What is usability testing?,Usability testing evaluates a product by testing it with real users to identify issues.,UX Designer,Easy
+67,What is the difference between UI and UX?,"UI refers to the visual design of interfaces, while UX focuses on the overall user experience.",UX Designer,Medium
+68,What is a customer journey map?,A journey map visualizes the steps a user takes to interact with a product or service.,UX Designer,Medium
+69,What is information architecture (IA)?,IA organizes and structures content to enable users to find information easily.,UX Designer,Medium
+70,What is a heuristic evaluation?,Heuristic evaluation involves experts reviewing a design against usability principles.,UX Designer,Medium
+71,What is the difference between qualitative and quantitative research in UX?,"Qualitative research focuses on understanding user behaviors, while quantitative measures metrics.",UX Designer,Medium
+72,What is accessibility in UX design?,Accessibility ensures that products are usable by people with disabilities or impairments.,UX Designer,Medium
+73,What is responsive design?,Responsive design adapts a website's layout to fit different screen sizes and devices.,UX Designer,Medium
+74,What is the role of typography in UX?,"Typography affects readability, aesthetics, and the overall user experience of a product.",UX Designer,Hard
+75,What is the Gestalt principle in UX design?,Gestalt principles describe how humans perceive visual elements as unified wholes.,UX Designer,Hard
+76,What is progressive disclosure in UX?,Progressive disclosure involves revealing information incrementally to reduce cognitive load.,UX Designer,Hard
+77,What are the differences between low-fidelity and high-fidelity prototypes?,"Low-fidelity prototypes are rough sketches, while high-fidelity prototypes are interactive and detailed.",UX Designer,Hard
+78,How do you measure the success of a UX design?,"Through metrics like task completion rate, time on task, user satisfaction, and Net Promoter Score.",UX Designer,Hard
+79,What is the purpose of card sorting in UX design?,Card sorting helps organize information by understanding how users categorize content.,UX Designer,Hard
+80,What is the role of UX in Agile development?,UX in Agile ensures design processes align with iterative development and user feedback.,UX Designer,Hard
+81,How do you ensure usability for a global audience?,"By considering cultural differences, localization, and testing with users from different regions.",UX Designer,Hard
+82,What is a full-stack developer?,A developer proficient in both front-end and back-end technologies.,Full Stack Developer,Easy
+83,What are the primary responsibilities of a full-stack developer?,"Designing, building, and maintaining both client-facing and server-side applications.",Full Stack Developer,Easy
+84,What is the difference between front-end and back-end development?,"Front-end deals with user interfaces; back-end handles server, database, and logic.",Full Stack Developer,Easy
+85,What are RESTful APIs?,"RESTful APIs follow REST architecture, enabling interaction between clients and servers.",Full Stack Developer,Easy
+86,What is a database schema?,"A schema defines the structure of a database, including tables, columns, and relationships.",Full Stack Developer,Easy
+87,What is the role of middleware in web development?,"Middleware connects client requests to server responses, handling tasks like authentication.",Full Stack Developer,Medium
+88,What is the MERN stack?,"MERN stands for MongoDB, Express, React, and Node.js.",Full Stack Developer,Medium
+89,What is server-side rendering (SSR)?,"SSR generates web pages on the server rather than in the browser, improving SEO and load times.",Full Stack Developer,Medium
+90,What is cross-origin resource sharing (CORS)?,CORS allows web applications to access resources from other domains while ensuring security.,Full Stack Developer,Medium
+91,What is the role of JSON in full-stack development?,JSON is a lightweight data format used for communication between front-end and back-end.,Full Stack Developer,Medium
+92,"What are microservices, and how are they different from monolithic architecture?",Microservices divide applications into independent services; monoliths are tightly coupled.,Full Stack Developer,Hard
+93,What are the benefits of using Docker in full-stack development?,"Docker enables containerization, improving consistency, scalability, and portability.",Full Stack Developer,Hard
+94,How does WebSocket differ from HTTP?,"WebSocket allows full-duplex communication, while HTTP is request-response based.",Full Stack Developer,Hard
+95,"What is GraphQL, and how does it compare to REST?",GraphQL is a query language for APIs that allows fetching specific data; REST retrieves fixed resources.,Full Stack Developer,Hard
+96,What is the difference between SQL and NoSQL databases?,"SQL databases are relational and structured, while NoSQL databases handle unstructured data.",Full Stack Developer,Hard
+97,What is authentication vs. authorization?,Authentication verifies identity; authorization determines access rights.,Full Stack Developer,Hard
+98,What is lazy loading in web development?,Lazy loading delays loading non-critical resources until they are needed.,Full Stack Developer,Hard
+99,What is the significance of state management in full-stack applications?,It ensures consistent data flow between front-end components.,Full Stack Developer,Hard
+100,How do you ensure security in full-stack applications?,"By implementing authentication, encryption, validation, and regular security updates.",Full Stack Developer,Hard
+101,"What is code splitting, and why is it used?","Code splitting divides code into chunks, reducing load times for web applications.",Full Stack Developer,Hard
+102,What is the purpose of HTML?,HTML structures web pages by defining elements and their hierarchy.,Frontend Developer,Easy
+103,"What is CSS, and why is it important?","CSS styles web pages, enhancing visual appeal and user experience.",Frontend Developer,Easy
+104,What is the Document Object Model (DOM)?,"The DOM represents HTML elements as a tree structure, enabling dynamic interaction.",Frontend Developer,Easy
+105,What is JavaScript used for in web development?,JavaScript adds interactivity and dynamic functionality to web pages.,Frontend Developer,Easy
+106,"What is the difference between inline, internal, and external CSS?",Inline applies styles directly; internal uses <style> tags; external links to a CSS file.,Frontend Developer,Easy
+107,What is responsive design?,A design approach ensuring websites adapt to various screen sizes and devices.,Frontend Developer,Medium
+108,What is the difference between classes and IDs in HTML?,Classes can apply styles to multiple elements; IDs are unique and apply to one element.,Frontend Developer,Medium
+109,What are pseudo-classes in CSS?,"Pseudo-classes define the state of an element, such as :hover or :focus.",Frontend Developer,Medium
+110,What is the difference between React and Angular?,"React is a library for UI development, while Angular is a full-fledged framework.",Frontend Developer,Medium
+111,What is the purpose of a CSS preprocessor?,Preprocessors like SASS simplify writing CSS by adding variables and functions.,Frontend Developer,Medium
+112,What is the box model in CSS?,"The box model represents HTML elements as a box with margins, borders, padding, and content.",Frontend Developer,Medium
+113,What are media queries in CSS?,Media queries apply styles based on device characteristics like screen size.,Frontend Developer,Medium
+114,What is the difference between == and === in JavaScript?,== checks equality with type coercion; === checks strict equality without coercion.,Frontend Developer,Hard
+115,What is shadow DOM?,"Shadow DOM encapsulates a component's styles and structure, preventing interference.",Frontend Developer,Hard
+116,What is client-side vs. server-side rendering?,"Client-side rendering occurs in the browser, while server-side rendering happens on the server.",Frontend Developer,Hard
+117,What is lazy loading for images?,Lazy loading delays image loading until they are visible in the viewport.,Frontend Developer,Hard
+118,What is the role of Webpack in frontend development?,Webpack bundles JavaScript modules and optimizes assets for web applications.,Frontend Developer,Hard
+119,What is the difference between synchronous and asynchronous JavaScript?,Synchronous blocks execution; asynchronous allows tasks to run independently.,Frontend Developer,Hard
+120,What is virtual DOM in React?,"Virtual DOM is an in-memory representation of the real DOM, optimizing UI updates.",Frontend Developer,Hard
+121,"What is Cross-Site Scripting (XSS), and how can it be prevented?",XSS is injecting malicious scripts into websites; prevention involves sanitizing inputs.,Frontend Developer,Hard
+122,What is backend development?,"Backend development focuses on server-side logic, databases, and APIs for web applications.",Backend Developer,Easy
+123,What is the purpose of a database in backend development?,Databases store and organize application data for efficient retrieval and management.,Backend Developer,Easy
+124,"What is an API, and why is it important?",An API allows communication between different software applications.,Backend Developer,Easy
+125,What is a web server?,A web server processes HTTP requests and delivers responses to the client.,Backend Developer,Easy
+126,What is the difference between GET and POST requests?,GET retrieves data from the server; POST sends data to the server for processing.,Backend Developer,Easy
+127,What is middleware in backend development?,Middleware processes requests and responses between a client and a server.,Backend Developer,Medium
+128,"What is a session, and how does it differ from a cookie?",Sessions store user data on the server; cookies store data in the browser.,Backend Developer,Medium
+129,What is the purpose of load balancing?,Load balancing distributes traffic across multiple servers to ensure high availability.,Backend Developer,Medium
+130,What is the difference between relational and non-relational databases?,Relational databases use structured tables; non-relational databases handle unstructured data.,Backend Developer,Medium
+131,What is an ORM (Object-Relational Mapping)?,An ORM allows developers to interact with databases using programming language objects.,Backend Developer,Medium
+132,What are the advantages of microservices architecture?,"Microservices improve scalability, modularity, and fault tolerance.",Backend Developer,Medium
+133,What is the difference between horizontal and vertical scaling?,Horizontal scaling adds servers; vertical scaling upgrades the server hardware.,Backend Developer,Medium
+134,"What is caching, and why is it important?",Caching stores frequently used data to improve application performance.,Backend Developer,Hard
+135,What is the difference between synchronous and asynchronous programming?,Synchronous blocks execution; asynchronous allows concurrent tasks.,Backend Developer,Hard
+136,How do you secure an API?,"By implementing authentication, authorization, rate limiting, and encryption.",Backend Developer,Hard
+137,What is a web socket?,Web sockets enable full-duplex communication between a client and a server.,Backend Developer,Hard
+138,What is the purpose of containerization tools like Docker?,"Docker packages applications with dependencies, ensuring consistency across environments.",Backend Developer,Hard
+139,What is the difference between monolithic and microservices architectures?,"Monolithic is a single codebase; microservices divide into smaller, independent services.",Backend Developer,Hard
+140,What is the difference between REST and SOAP APIs?,REST is lightweight and uses HTTP; SOAP is protocol-based and more standardized.,Backend Developer,Hard
+141,What is database normalization?,Database normalization organizes tables to reduce redundancy and improve data integrity.,Backend Developer,Hard
+142,What is machine learning?, Machine learning is a subset of AI that enables systems to learn from data.,ML Engineer,Easy
+143,What is supervised learning?,A learning approach where the model learns from labeled data.,ML Engineer,Easy
+144,What is the difference between classification and regression?,Classification predicts categories; regression predicts continuous values.,ML Engineer,Easy
+145,What are common algorithms used in machine learning?,"Examples include linear regression, decision trees, SVMs, and neural networks.",ML Engineer,Easy
+146,"What is overfitting, and how can it be avoided?",Overfitting occurs when a model performs well on training data but poorly on new data; it can be avoided with regularization.,ML Engineer,Medium
+147,What is a confusion matrix?,"A confusion matrix evaluates classification performance by showing true positives, false positives, etc.",ML Engineer,Medium
+148,What is cross-validation in ML?,Cross-validation splits data into training and validation sets for robust model evaluation.,ML Engineer,Medium
+149,What is feature engineering?,Feature engineering creates relevant features to improve model performance.,ML Engineer,Medium
+150,What is the role of hyperparameter tuning?,Hyperparameter tuning optimizes model settings for better performance.,ML Engineer,Medium
+151,What is gradient descent?,Gradient descent is an optimization algorithm used to minimize a model's loss function.,ML Engineer,Medium
+152,What is the difference between bagging and boosting?,Bagging reduces variance; boosting reduces bias by sequentially improving weak learners.,ML Engineer,Medium
+153,"What is an RNN, and how does it differ from a CNN?",RNNs handle sequential data; CNNs process spatial data like images.,ML Engineer,Hard
+154,What is transfer learning?,"Transfer learning applies pre-trained models to new tasks, reducing training time.",ML Engineer,Hard
+155,What is the difference between supervised and unsupervised learning?,Supervised uses labeled data; unsupervised finds patterns in unlabeled data.,ML Engineer,Hard
+156,"What is PCA, and when is it used?",Principal Component Analysis reduces dimensionality while preserving variance.,ML Engineer,Hard
+157,What is the difference between a parametric and non-parametric model?,Parametric models assume a fixed number of parameters; non-parametric models grow with data.,ML Engineer,Hard
+158,What are some evaluation metrics for regression models?,"Examples include RMSE, MAE, and R-squared.",ML Engineer,Hard
+159,What is a perceptron?,A perceptron is the simplest type of neural network unit used for binary classification.,ML Engineer,Hard
+160,What is the curse of dimensionality?,High-dimensional data can reduce model performance and increase computational cost.,ML Engineer,Hard
+161,What is the role of the activation function in neural networks?,"Activation functions introduce non-linearity, enabling networks to learn complex patterns.",ML Engineer,Hard
+162,What is the role of a data analyst?,"A data analyst collects, processes, and interprets data to provide actionable insights.",Data Analyst,Easy
+163,What are the key steps in data analysis?,"Collection, cleaning, exploration, visualization, and reporting.",Data Analyst,Easy
+164,What is the difference between data and information?,"Data is raw, unprocessed facts; information is processed, meaningful data.",Data Analyst,Easy
+165,What is a pivot table in Excel?,A pivot table summarizes and analyzes large datasets in Excel.,Data Analyst,Easy
+166,What is the purpose of data visualization?,Data visualization presents data visually to uncover patterns and insights.,Data Analyst,Easy
+167,What is ETL in data analysis?,"ETL stands for Extract, Transform, Load—a process for preparing data for analysis.",Data Analyst,Medium
+168,What is the difference between structured and unstructured data?,"Structured data is organized in tables; unstructured data includes images, videos, etc.",Data Analyst,Medium
+169,What are common tools used for data analysis?,"Tools include Excel, SQL, Python, R, Tableau, and Power BI.",Data Analyst,Medium
+170,What is a data warehouse?,A data warehouse is a central repository for integrating data from multiple sources.,Data Analyst,Medium
+171,What is the difference between correlation and causation?,Correlation shows relationships; causation indicates direct influence.,Data Analyst,Medium
+172,What is the purpose of exploratory data analysis (EDA)?,"EDA examines data to discover patterns, anomalies, or insights before modeling.",Data Analyst,Medium
+173,"What are outliers, and how can they be treated?","Outliers are extreme values; they can be treated by removal, transformation, or imputation.",Data Analyst,Medium
+174,What is a time-series analysis?,Time-series analysis studies data points collected over time.,Data Analyst,Medium
+175,What is the purpose of SQL in data analysis?,SQL queries retrieve and manipulate structured data in databases.,Data Analyst,Hard
+176,What is data normalization?,Data normalization scales data values to a common range without distortion.,Data Analyst,Hard
+177,What are common chart types used in data visualization?,"Examples include bar charts, line graphs, scatter plots, and histograms.",Data Analyst,Easy
+178,What is hypothesis testing in data analysis?,Hypothesis testing evaluates assumptions about data populations.,Data Analyst,Hard
+179,What is a KPI (Key Performance Indicator)?,A KPI measures performance in achieving specific objectives.,Data Analyst,Hard
+180,What is a data pipeline?,A data pipeline automates data flow from source to destination for processing.,Data Analyst,Hard
+181,What is regression analysis?,Regression analysis predicts relationships between dependent and independent variables.,Data Analyst,Hard

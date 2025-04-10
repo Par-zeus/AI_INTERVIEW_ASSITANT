@@ -10,11 +10,10 @@ const cookieParser = require("cookie-parser");
 const corsOptions=require("./config/corsOptions");
 const credentials=require("./middleware/credentials");
 const verifyJWT=require('./middleware/verifyJWT');
-const verifyRoles=require("./middleware/verifyRoles");
-const ROLES_LIST=require("./config/roles_list");
 const multer = require('multer');
 const csv = require('csv-parser');
 const speech = require('@google-cloud/speech');
+const questionRoutes=require('./routes/questionsRoute');
 // Environment variables
 const PORT = process.env.PORT || 8080;
 const MONGO_URL = process.env.MONGO_URL  ;
@@ -94,91 +93,95 @@ function loadQuestionsFromCSV() {
 // Global variable to store loaded questions
 let loadedQuestions = null;
 
-app.post('/api/get-next-question', async (req, res) => {
-  try {
-    // Load questions if not already loaded
-    if (!loadedQuestions) {
-      loadedQuestions = await loadQuestionsFromCSV();
-    }
+app
+// app.post('/api/get-next-question', async (req, res) => {
 
-    const { lastAnswer, role, questionHistory = [] } = req.body;
+//   try {
+//     // Load questions if not already loaded
+//     if (!loadedQuestions) {
+//       loadedQuestions = await loadQuestionsFromCSV();
+//     }
+
+//     const { lastAnswer, role, questionHistory = [] } = req.body;
     
-    // Validate role
-    if (!loadedQuestions[role]) {
-      return res.status(400).json({
-        success: false,
-        error: `No questions found for role: ${role}`
-      });
-    }
+//     // Validate role
+//     if (!loadedQuestions[role]) {
+//       return res.status(400).json({
+//         success: false,
+//         error: `No questions found for role: ${role}`
+//       });
+//     }
 
-    // If this is the first question
-    if (!lastAnswer || questionHistory.length === 0) {
-      // Randomly select difficulty levels with a bias towards easier questions
-      const difficultyLevels = ['easy', 'easy', 'easy', 'medium', 'medium', 'hard'];
-      const randomDifficulty = difficultyLevels[Math.floor(Math.random() * difficultyLevels.length)];
+//     // If this is the first question
+//     if (!lastAnswer || questionHistory.length === 0) {
+//       // Randomly select difficulty levels with a bias towards easier questions
+//       const difficultyLevels = ['easy', 'easy', 'easy', 'medium', 'medium', 'hard'];
+//       const randomDifficulty = difficultyLevels[Math.floor(Math.random() * difficultyLevels.length)];
       
-      const roleQuestions = loadedQuestions[role][randomDifficulty];
+//       const roleQuestions = loadedQuestions[role][randomDifficulty];
       
-      // Ensure we don't repeat questions
-      const availableQuestions = roleQuestions.filter(q => !questionHistory.includes(q));
+//       // Ensure we don't repeat questions
+//       const availableQuestions = roleQuestions.filter(q => !questionHistory.includes(q));
       
-      if (availableQuestions.length === 0) {
-        return res.status(404).json({
-          success: false,
-          error: 'No more unique questions available'
-        });
-      }
+//       if (availableQuestions.length === 0) {
+//         return res.status(404).json({
+//           success: false,
+//           error: 'No more unique questions available'
+//         });
+//       }
 
-      const question = availableQuestions[Math.floor(Math.random() * availableQuestions.length)];
+//       const question = availableQuestions[Math.floor(Math.random() * availableQuestions.length)];
       
-      return res.json({
-        success: true,
-        question,
-        metadata: { 
-          role, 
-          difficulty: randomDifficulty 
-        }
-      });
-    }
+//       return res.json({
+//         success: true,
+//         question,
+//         metadata: { 
+//           role, 
+//           difficulty: randomDifficulty 
+//         }
+//       });
+//     }
 
-    // Logic for follow-up questions can be added here if needed
-    // For now, we'll just generate another random question
-    const difficultyLevels = ['easy', 'easy', 'easy', 'medium', 'medium', 'hard'];
-    const randomDifficulty = difficultyLevels[Math.floor(Math.random() * difficultyLevels.length)];
+//     // Logic for follow-up questions can be added here if needed
+//     // For now, we'll just generate another random question
+//     const difficultyLevels = ['easy', 'easy', 'easy', 'medium', 'medium', 'hard'];
+//     const randomDifficulty = difficultyLevels[Math.floor(Math.random() * difficultyLevels.length)];
     
-    const roleQuestions = loadedQuestions[role][randomDifficulty];
+//     const roleQuestions = loadedQuestions[role][randomDifficulty];
     
-    // Ensure we don't repeat questions
-    const availableQuestions = roleQuestions.filter(q => !questionHistory.includes(q));
+//     // Ensure we don't repeat questions
+//     const availableQuestions = roleQuestions.filter(q => !questionHistory.includes(q));
     
-    if (availableQuestions.length === 0) {
-      return res.status(404).json({
-        success: false,
-        error: 'No more unique questions available'
-      });
-    }
+//     if (availableQuestions.length === 0) {
+//       return res.status(404).json({
+//         success: false,
+//         error: 'No more unique questions available'
+//       });
+//     }
 
-    const question = availableQuestions[Math.floor(Math.random() * availableQuestions.length)];
+//     const question = availableQuestions[Math.floor(Math.random() * availableQuestions.length)];
     
-    return res.json({
-      success: true,
-      question,
-      metadata: { 
-        role, 
-        difficulty: randomDifficulty 
-      }
-    });
+//     return res.json({
+//       success: true,
+//       question,
+//       metadata: { 
+//         role, 
+//         difficulty: randomDifficulty 
+//       }
+//     });
 
-  } catch (error) {
-    console.error('Error generating question:', error);
-    res.status(500).json({
-      success: false,
-      error: 'Failed to generate interview question'
-    });
-  }
-});
+//   } catch (error) {
+//     console.error('Error generating question:', error);
+//     res.status(500).json({
+//       success: false,
+//       error: 'Failed to generate interview question'
+//     });
+//   }
+// });
 
 // Helper function to analyze answers
+
+app.use('/questions', questionRoutes);
 function analyzeAnswer(answer) {
   const lowerAnswer = answer.toLowerCase();
   
@@ -254,78 +257,7 @@ app.post('/api/transcribe', upload.single('audio'), async (req, res) => {
     res.status(500).send('Failed to transcribe audio.');
   }
 });
-// Get next question endpoint
-// app.post('/api/get-next-question', async (req, res) => {
-//   try {
-//     const { lastAnswer, questionHistory = [] } = req.body;
-    
-//     // If this is the first question
-//     if (!lastAnswer || questionHistory.length === 0) {
-//       const categories = Object.keys(interviewQuestions);
-//       const randomCategory = categories[Math.floor(Math.random() * categories.length)];
-//       const subcategories = Object.keys(interviewQuestions[randomCategory]);
-//       const randomSubcategory = subcategories[Math.floor(Math.random() * subcategories.length)];
-//       const initialQuestions = interviewQuestions[randomCategory][randomSubcategory].initial;
-//       const question = initialQuestions[Math.floor(Math.random() * initialQuestions.length)];
-      
-//       return res.json({
-//         success: true,
-//         question,
-//         metadata: { category: randomCategory, subcategory: randomSubcategory }
-//       });
-//     }
-    
-//     // Analyze the last answer
-//     const analysis = analyzeAnswer(lastAnswer);
-    
-//     // Get follow-up questions for the analyzed category
-//     const followUps = interviewQuestions[analysis.category][analysis.subcategory].followUps;
-//     const followUpTypes = Object.keys(followUps);
-//     const randomType = followUpTypes[Math.floor(Math.random() * followUpTypes.length)];
-//     const possibleQuestions = followUps[randomType];
-    
-//     // Filter out questions that have already been asked
-//     const newQuestions = possibleQuestions.filter(q => !questionHistory.includes(q));
-    
-//     // If all follow-ups have been used, select a new initial question
-//     if (newQuestions.length === 0) {
-//       const categories = Object.keys(interviewQuestions);
-//       const randomCategory = categories[Math.floor(Math.random() * categories.length)];
-//       const subcategories = Object.keys(interviewQuestions[randomCategory]);
-//       const randomSubcategory = subcategories[Math.floor(Math.random() * subcategories.length)];
-//       const initialQuestions = interviewQuestions[randomCategory][randomSubcategory].initial;
-//       const question = initialQuestions[Math.floor(Math.random() * initialQuestions.length)];
-      
-//       return res.json({
-//         success: true,
-//         question,
-//         metadata: { category: randomCategory, subcategory: randomSubcategory, type: 'new_topic' }
-//       });
-//     }
-    
-//     // Select a random new question
-//     const question = newQuestions[Math.floor(Math.random() * newQuestions.length)];
-    
-//     res.json({
-//       success: true,
-//       question,
-//       metadata: { 
-//         category: analysis.category, 
-//         subcategory: analysis.subcategory,
-//         type: 'follow_up'
-//       }
-//     });
-    
-//   } catch (error) {
-//     console.error('Error getting next question:', error);
-//     res.status(500).json({
-//       success: false,
-//       error: error.message,
-//       timestamp: new Date().toISOString()
-//     });
-//   }
-// });
-
+app.use('/interview',require('./routes/ScheduleInterview'));
 // Test OpenAI connectivity
 app.get('/api/test-openai', async (req, res) => {
   try {
@@ -360,6 +292,8 @@ app.use((err, req, res, next) => {
 
 app.use(verifyJWT);
 app.use('/users',require('./routes/user'));
+
+
 
 app.listen(PORT,()=>{
   console.log("Server is running on Port",PORT);

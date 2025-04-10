@@ -1,5 +1,5 @@
 const Roles={
-    "Admin":5150,
+    "Intervi":5000,
     "User":2001
 }
 

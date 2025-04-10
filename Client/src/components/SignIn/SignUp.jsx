@@ -13,7 +13,8 @@ const SignUp = () => {
     username: '',
     email: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    role:''  
   });
 
   const [errors, setErrors] = useState({});
@@ -39,6 +40,10 @@ const SignUp = () => {
     
     if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = 'Passwords do not match';
+    }
+
+    if (!formData.role) {
+      newErrors.role = 'Please select a role';
     }
 
     setErrors(newErrors);
@@ -69,7 +74,7 @@ const SignUp = () => {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ username: formData.username, password: formData.password, email: formData.email }),
+          body: JSON.stringify({ username: formData.username, password: formData.password, email: formData.email ,role:formData.role}),
         });
         console.log(response);
         navigate("/login");
@@ -178,6 +183,37 @@ const SignUp = () => {
               <p className="mt-1 text-sm text-red-500">{errors.confirmPassword}</p>
             )}
           </div>
+          <div>
+            <label className="block text-gray-700">Role</label>
+            <div className="flex space-x-4">
+              <label className="inline-flex items-center">
+                <input
+                  type="radio"
+                  name="role"
+                  value="interviewer"
+                  checked={formData.role === 'interviewer'}
+                  onChange={handleChange}
+                  className="form-radio"
+                />
+                <span className="ml-2">Interviewer</span>
+              </label>
+              <label className="inline-flex items-center">
+                <input
+                  type="radio"
+                  name="role"
+                  value="interviewee"
+                  checked={formData.role === 'interviewee'}
+                  onChange={handleChange}
+                  className="form-radio"
+                />
+                <span className="ml-2">Interviewee</span>
+              </label>
+            </div>
+            {errors.role && (
+              <p className="mt-1 text-sm text-red-500">{errors.role}</p>
+            )}
+          </div>
+
 
           {/* Submit Button */}
           <button

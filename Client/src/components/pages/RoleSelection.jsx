@@ -8,7 +8,7 @@ const RoleSelection = () => {
   const [availableRoles, setAvailableRoles] = useState([]);
   const handleRoleSelect = (role) => {
     localStorage.setItem('selectedRole', role);
-    navigate(`/interview/mode/${role}`);
+    navigate(`/interview/${role}`);
   };
   useEffect(() => {
     // Get recommended roles from localStorage
@@ -16,41 +16,104 @@ const RoleSelection = () => {
     console.log(recommendedRoles);
     // Map recommended roles to the full role objects with icons and descriptions
     const roleMapping = {
+      // Software Development Roles
       'Software Engineer': {
         icon: '💻',
         description: 'Technical interviews focusing on coding, system design, and problem-solving'
-      },
-      'Data Scientist': {
-        icon: '📊',
-        description: 'Questions on statistics, machine learning, and data analysis'
-      },
-      'Product Manager': {
-        icon: '📱',
-        description: 'Product strategy, user experience, and business cases'
-      },
-      'UX Designer': {
-        icon: '🎨',
-        description: 'Design thinking, user research, and portfolio discussion'
-      },
-      'Full Stack Developer': {
-        icon: '🌐',
-        description: 'Full stack development, architecture, and web technologies'
-      },
-      'Frontend Developer': {
-        icon: '🎨',
-        description: 'Frontend development, UI frameworks, and web performance'
       },
       'Backend Developer': {
         icon: '⚙️',
         description: 'Backend architecture, APIs, and database design'
       },
+      'Frontend Developer': {
+        icon: '🎨',
+        description: 'Frontend development, UI frameworks, and web performance'
+      },
+      'Full Stack Developer': {
+        icon: '🌐',
+        description: 'Full stack development, architecture, and web technologies'
+      },
+      'Game Developer': {
+        icon: '🎮',
+        description: 'Game development, graphics programming, and game engines'
+      },
+    
+      // Data & AI Roles
+      'Data Scientist': {
+        icon: '📊',
+        description: 'Questions on statistics, machine learning, and data analysis'
+      },
       'ML Engineer': {
         icon: '🤖',
         description: 'Machine learning systems, model deployment, and MLOps'
       },
+      'AI Researcher': {
+        icon: '🧠',
+        description: 'Advanced AI concepts, research methodologies, and paper implementations'
+      },
       'Data Analyst': {
         icon: '📈',
         description: 'Data analysis, visualization, and business insights'
+      },
+      'Data Engineer': {
+        icon: '🔧',
+        description: 'Data pipeline development, ETL processes, and data infrastructure'
+      },
+      'Database Administrator': {
+        icon: '🗄️',
+        description: 'Database management, optimization, and maintenance'
+      },
+    
+      // DevOps & Cloud Roles
+      'Cloud Engineer': {
+        icon: '☁️',
+        description: 'Cloud infrastructure, services, and cloud-native applications'
+      },
+      'DevOps Engineer': {
+        icon: '🔄',
+        description: 'CI/CD pipelines, infrastructure as code, and automation'
+      },
+    
+      // Product & Design Roles
+      'Product Manager': {
+        icon: '📱',
+        description: 'Product strategy, user experience, and business cases'
+      },
+      'Scrum Master': {
+        icon: '📋',
+        description: 'Agile methodologies, team facilitation, and process improvement'
+      },
+      'UX Designer': {
+        icon: '🎨',
+        description: 'Design thinking, user research, and portfolio discussion'
+      },
+    
+      // Security Roles
+      'Cybersecurity Engineer': {
+        icon: '🔒',
+        description: 'Security assessments, threat detection, and security protocols'
+      },
+    
+      // Blockchain Roles
+      'Blockchain Developer': {
+        icon: '⛓️',
+        description: 'Blockchain protocols, smart contracts, and decentralized applications'
+      },
+    
+      // Management Roles
+      'Manager': {
+        icon: '👥',
+        description: 'Team management, leadership, and organizational skills'
+      },
+      'Team Lead': {
+        icon: '👤',
+        description: 'Technical leadership, mentoring, and project coordination'
+      },
+    
+      // General
+      'General Software Engineer': {
+        icon: '💻',
+        description: 'General software development skills and programming fundamentals'
       }
     };
     
