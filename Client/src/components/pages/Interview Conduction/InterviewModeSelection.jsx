@@ -1,118 +1,285 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import {
   Video,
-  Mic,
-  Cpu
+  ChevronLeft,
+  ArrowRight,
+  Sparkles,
+  Calendar,
+  Clock,
+  Users,
+  Bot,
+  CheckCircle,
+  Camera,
+  Globe
 } from 'lucide-react';
 
 const InterviewModeSelection = () => {
   const { role } = useParams();
   const navigate = useNavigate();
+  const [isVisible, setIsVisible] = useState(false);
 
-  const modes = [
+  useEffect(() => {
+    setIsVisible(true);
+  }, []);
+
+  const handleBack = () => {
+    navigate(-1);
+  };
+
+  // Animation utility function
+  const fadeIn = (delay = 0) => ({
+    initial: { opacity: 0, y: 20 },
+    animate: { 
+      opacity: isVisible ? 1 : 0, 
+      y: isVisible ? 0 : 20 
+    },
+    transition: { 
+      duration: 0.6, 
+      delay: delay,
+      ease: [0.22, 1, 0.36, 1]
+    }
+  });
+
+  const scaleIn = (delay = 0) => ({
+    initial: { opacity: 0, scale: 0.92 },
+    animate: { 
+      opacity: isVisible ? 1 : 0, 
+      scale: isVisible ? 1 : 0.92
+    },
+    transition: { 
+      duration: 0.5, 
+      delay: delay,
+      ease: [0.22, 1, 0.36, 1]
+    }
+  });
+
+  // Interview features
+  const features = [
     {
-      id: 'video',
-      title: 'Video Interview',
-      icon: <Video className="text-teal-600" size={48} />,
-      description: 'Record video responses to simulate real interview scenarios',
-      gradient: 'from-teal-500 to-emerald-500'
+      icon: <Camera className="text-indigo-300" size={24} />,
+      title: "Video Response Recording",
+      description: "Practice answering questions in a simulated interview environment with video recording capabilities"
     },
     {
-      id: 'ai-oral',
-      title: 'Audio Interview',
-      icon: <Mic className="text-teal-600" size={48} />,
-      description: 'Audio-based interview to assess verbal communication skills',
-      gradient: 'from-cyan-500 to-teal-500'
+      icon: <CheckCircle className="text-indigo-300" size={24} />,
+      title: "AI-Powered Feedback",
+      description: "Receive detailed feedback on your communication style, body language, and response quality"
+    },
+    {
+      icon: <Globe className="text-indigo-300" size={24} />,
+      title: "Role-Specific Questions",
+      description: "Face questions tailored specifically for the selected role and industry standards"
     }
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-teal-50 py-24 px-6">
-      <div className="max-w-6xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-16"
+    <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-indigo-900 text-white pb-16">
+      <div className="container mx-auto px-6 py-12 lg:py-16">
+        {/* Back button */}
+        <button 
+          onClick={handleBack}
+          className="flex items-center text-indigo-300 hover:text-indigo-100 transition-colors mb-8"
+          style={fadeIn(0.1).animate}
         >
-          <div className="inline-block mb-6">
-            <span className="bg-teal-100 text-teal-800 text-sm font-semibold px-4 py-2 rounded-full">
-              Get Started
-            </span>
-          </div>
-          <h2 className="text-5xl font-bold text-teal-800 mb-6 tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-teal-600 to-cyan-600">
-            Interview Preparation Mode
-          </h2>
-          <p className="text-2xl text-gray-600 relative inline-block">
-            Role: 
-            <span className="font-semibold text-teal-700 ml-2 relative">
-              {role}
-              <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-teal-300 to-cyan-300 transform scale-x-100"></div>
-            </span>
-          </p>
-        </motion.div>
+          <ChevronLeft size={20} />
+          <span className="ml-1">Back</span>
+        </button>
 
-        <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 mb-20">
-          {modes.map((mode, index) => (
-            <motion.div
-              key={mode.id}
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: index * 0.2 }}
-              onClick={() => navigate(`/interview/${role}/${mode.id}`)}
-              className="relative bg-white rounded-2xl shadow-lg hover:shadow-2xl p-8 cursor-pointer
-                         transform hover:scale-105 transition-all duration-500 ease-in-out
-                         border border-transparent hover:border-teal-100 group
-                         overflow-hidden"
-            >
-              {/* Gradient Background Overlay */}
-              <div className={`absolute inset-0 opacity-0 group-hover:opacity-5 transition-opacity duration-500
-                              bg-gradient-to-br ${mode.gradient}`}></div>
-              
-              <div className="relative flex flex-col items-center text-center space-y-4">
-                <div className="mb-2 transform group-hover:scale-110 transition-transform duration-300
-                              p-4 rounded-full bg-teal-50 group-hover:bg-teal-100 transition-colors">
-                  {mode.icon}
-                </div>
-                <h3 className="text-2xl font-bold text-teal-800 mb-3">
-                  {mode.title}
-                </h3>
-                <p className="text-gray-600 leading-relaxed">
-                  {mode.description}
-                </p>
-                <span className="inline-flex items-center text-teal-600 font-semibold mt-4 px-6 py-2
-                                group-hover:text-teal-700 transition-all duration-300
-                                rounded-full bg-teal-50 group-hover:bg-teal-100">
-                  Start Interview
-                  <svg className="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform duration-300" 
-                       fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </span>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-
-        <div className="mt-16 text-center space-y-6">
-          <div className="inline-flex items-center bg-gradient-to-r from-teal-100 to-cyan-100 
-                          rounded-full px-8 py-4 shadow-md hover:shadow-lg transition-all duration-300
-                          border border-teal-200/30">
-            <Cpu className="mr-4 text-teal-700" size={24} />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-700 to-cyan-700 font-semibold text-lg">
-              AI-Powered Interview Preparation
-            </span>
+        {/* Header */}
+        <div 
+          className="text-center mb-12 lg:mb-16"
+          style={fadeIn(0.2).animate}
+        >
+          <div className="inline-block mb-6 p-2 bg-indigo-900/50 rounded-full backdrop-blur-md">
+            <div className="flex items-center space-x-2 px-4 py-1 bg-indigo-600/80 rounded-full">
+              <Sparkles size={16} className="text-indigo-200" />
+              <span className="text-sm font-medium text-indigo-100">
+                Video Interview Session
+              </span>
+            </div>
           </div>
           
-          <motion.p 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-            className="text-gray-500 text-sm max-w-md mx-auto"
+          <h2 
+            className="text-4xl md:text-5xl font-bold mb-6 leading-tight bg-clip-text text-transparent bg-gradient-to-r from-indigo-200 via-blue-300 to-indigo-200"
           >
-            Choose your preferred interview mode to begin your preparation journey
-          </motion.p>
+            Ready for Your Interview?
+          </h2>
+          
+          <div className="inline-flex items-center px-5 py-2 bg-indigo-900/40 rounded-full backdrop-blur-sm border border-indigo-700/50 mb-4">
+            <span className="text-indigo-300 mr-2">Role:</span>
+            <span className="font-semibold text-white">{role}</span>
+          </div>
+          
+          <p className="text-xl text-indigo-100 max-w-2xl mx-auto">
+            Our video interview simulation provides a realistic experience with personalized AI feedback
+          </p>
+        </div>
+
+        {/* Main Content - Two Columns */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 max-w-6xl mx-auto mb-16">
+          {/* Left Column - Video Interview Card */}
+          <div
+            style={scaleIn(0.3).animate}
+            className="bg-slate-800/60 backdrop-blur-md rounded-2xl border border-indigo-800/40
+                      hover:border-indigo-600/70 transition-all duration-300
+                      hover:shadow-2xl hover:shadow-indigo-600/10 group relative overflow-hidden"
+          >
+            {/* Gradient Background Overlay */}
+            <div className="absolute inset-0 opacity-0 group-hover:opacity-30 transition-opacity duration-500
+                          bg-gradient-to-br from-blue-600/20 to-indigo-600/20"></div>
+            
+            {/* Card Content */}
+            <div className="p-8 relative z-10">
+              <div className="inline-flex items-center justify-center p-4 mb-5 bg-indigo-900/70 rounded-xl
+                            transform group-hover:scale-105 transition-transform duration-300">
+                <Video className="text-indigo-300" size={40} />
+              </div>
+              
+              <h3 className="text-2xl font-bold text-indigo-100 mb-4 group-hover:text-white transition-colors">
+                Video Interview Experience
+              </h3>
+              
+              <p className="text-indigo-200/80 mb-6">
+                Our immersive video interview simulator creates a realistic interview environment where you can practice your responses while being recorded. Receive comprehensive AI feedback on your verbal and non-verbal communication.
+              </p>
+              
+              {/* Features */}
+              <div className="space-y-3 mb-6">
+                <div className="flex items-center text-sm">
+                  <div className="w-1.5 h-1.5 rounded-full bg-indigo-400 mr-2"></div>
+                  <span className="text-indigo-200">Full video recording capabilities</span>
+                </div>
+                <div className="flex items-center text-sm">
+                  <div className="w-1.5 h-1.5 rounded-full bg-indigo-400 mr-2"></div>
+                  <span className="text-indigo-200">Body language and facial expression analysis</span>
+                </div>
+                <div className="flex items-center text-sm">
+                  <div className="w-1.5 h-1.5 rounded-full bg-indigo-400 mr-2"></div>
+                  <span className="text-indigo-200">Speech pattern and confidence assessment</span>
+                </div>
+                <div className="flex items-center text-sm">
+                  <div className="w-1.5 h-1.5 rounded-full bg-indigo-400 mr-2"></div>
+                  <span className="text-indigo-200">Realistic question-answer format</span>
+                </div>
+                <div className="flex items-center text-sm">
+                  <div className="w-1.5 h-1.5 rounded-full bg-indigo-400 mr-2"></div>
+                  <span className="text-indigo-200">Detailed response improvement suggestions</span>
+                </div>
+              </div>
+              
+              {/* Start Button */}
+              <div className="flex items-center justify-between mt-auto pt-4 border-t border-indigo-800/30">
+                <span className="text-sm text-indigo-300">
+                  15-30 minutes
+                </span>
+                
+                <button 
+                  onClick={() => navigate('/interview')}
+                  className="flex items-center text-indigo-200 group-hover:text-white
+                           px-4 py-2 rounded-full bg-indigo-900/50 group-hover:bg-indigo-700/50
+                           transition-all duration-300"
+                >
+                  Start Interview
+                  <ArrowRight size={16} className="ml-2 transform group-hover:translate-x-1 transition-transform duration-300" />
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          {/* Right Column - How It Works */}
+          <div 
+            style={fadeIn(0.4).animate}
+            className="flex flex-col space-y-8"
+          >
+            <div className="bg-slate-800/40 backdrop-blur-md p-6 rounded-2xl border border-indigo-800/40">
+              <h3 className="text-xl font-bold text-indigo-100 mb-4">How The Interview Works</h3>
+              <ol className="space-y-4">
+                <li className="flex items-start">
+                  <div className="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-indigo-900/70 text-indigo-200 font-semibold mr-3 mt-0.5">1</div>
+                  <div>
+                    <h4 className="font-medium text-indigo-100">Prepare Your Setup</h4>
+                    <p className="text-sm text-indigo-200/80 mt-1">Find a quiet space with good lighting and ensure your camera and microphone are working properly.</p>
+                  </div>
+                </li>
+                <li className="flex items-start">
+                  <div className="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-indigo-900/70 text-indigo-200 font-semibold mr-3 mt-0.5">2</div>
+                  <div>
+                    <h4 className="font-medium text-indigo-100">Answer Interview Questions</h4>
+                    <p className="text-sm text-indigo-200/80 mt-1">You'll be presented with role-specific questions to answer on camera within a time limit.</p>
+                  </div>
+                </li>
+                <li className="flex items-start">
+                  <div className="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-indigo-900/70 text-indigo-200 font-semibold mr-3 mt-0.5">3</div>
+                  <div>
+                    <h4 className="font-medium text-indigo-100">Receive AI Feedback</h4>
+                    <p className="text-sm text-indigo-200/80 mt-1">After completing the interview, get comprehensive feedback on your performance with improvement tips.</p>
+                  </div>
+                </li>
+                <li className="flex items-start">
+                  <div className="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-indigo-900/70 text-indigo-200 font-semibold mr-3 mt-0.5">4</div>
+                  <div>
+                    <h4 className="font-medium text-indigo-100">Review & Improve</h4>
+                    <p className="text-sm text-indigo-200/80 mt-1">Watch your responses, study the feedback, and practice again to enhance your skills.</p>
+                  </div>
+                </li>
+              </ol>
+            </div>
+            
+            <div className="bg-indigo-600/20 backdrop-blur-md p-6 rounded-2xl border border-indigo-700/40">
+              <div className="flex items-start">
+                <div className="p-3 bg-indigo-900/70 rounded-xl mr-4">
+                  <Bot className="text-indigo-300" size={24} />
+                </div>
+                <div>
+                  <h3 className="font-bold text-indigo-100 mb-2">AI-Powered Interview Coach</h3>
+                  <p className="text-indigo-200/90 text-sm">
+                    Our intelligent system analyzes your responses, body language, and speech patterns to provide personalized coaching that helps you improve with each practice session.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Stats Section */}
+        <div 
+          className="bg-indigo-900/30 backdrop-blur-lg py-10 rounded-2xl border border-indigo-800/40 max-w-5xl mx-auto"
+          style={fadeIn(0.6).animate}
+        >
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="flex flex-col items-center text-center px-6">
+              <Calendar className="text-indigo-300 mb-4" size={32} />
+              <h4 className="text-2xl font-bold text-white mb-2">30+</h4>
+              <p className="text-indigo-200">Interview scenarios per role</p>
+            </div>
+            
+            <div className="flex flex-col items-center text-center px-6 border-y md:border-y-0 md:border-x border-indigo-700/30 py-6 md:py-0">
+              <Clock className="text-indigo-300 mb-4" size={32} />
+              <h4 className="text-2xl font-bold text-white mb-2">24/7</h4>
+              <p className="text-indigo-200">Practice whenever suits you</p>
+            </div>
+            
+            <div className="flex flex-col items-center text-center px-6">
+              <Bot className="text-indigo-300 mb-4" size={32} />
+              <h4 className="text-2xl font-bold text-white mb-2">AI-Driven</h4>
+              <p className="text-indigo-200">Adaptive interview difficulty</p>
+            </div>
+          </div>
+        </div>
+        
+        {/* Information Footer */}
+        <div 
+          className="mt-16 text-center" 
+          style={fadeIn(0.7).animate}
+        >
+          <div className="inline-flex items-center justify-center space-x-2 bg-indigo-900/40 backdrop-blur-sm
+                        border border-indigo-700/50 rounded-full px-6 py-3 shadow-lg shadow-indigo-900/20">
+            <Users className="text-indigo-400" size={20} />
+            <span className="text-indigo-200 font-medium text-sm">
+              Join 10,000+ professionals improving their interview skills
+            </span>
+          </div>
         </div>
       </div>
     </div>

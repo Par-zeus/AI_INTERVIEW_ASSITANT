@@ -10,7 +10,8 @@ const useRefreshToken = () => {
         const accessToken=response?.data?.accessToken;
         const email=response?.data?.email;
         const roles=response?.data?.roles;
-        setAuthInfo({accessToken},email,roles);
+        const _id=response?.data?._id;
+        setAuthInfo({accessToken},email,roles,_id);
         // setAuth(prev => ({
         //     ...prev,
         //     roles: response.data.roles,

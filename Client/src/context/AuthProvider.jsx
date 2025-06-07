@@ -7,16 +7,18 @@ export const AuthProvider = ({ children }) => {
         isAuthenticated: false,
         roles: null,
         accessToken: null,
+        _id:null,
         email: null,
         userName:null
     });
 
-    const setAuthInfo = ({ accessToken }, email, roles,userName) => {
+    const setAuthInfo = ({ accessToken }, email, roles,userName,_id) => {
         setAuth({
             isAuthenticated: !!accessToken,
             accessToken,
             email,
             roles,
+            _id,
             userName
         });
     };

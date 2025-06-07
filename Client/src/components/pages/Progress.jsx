@@ -1,10 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { User, Clock, Briefcase, Star, BarChart, Calendar } from 'lucide-react';
 import { progress } from 'framer-motion';
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 
-// Progress Component
 const Progress = () => {
+  const [analyses, setAnalyses] = useState([]);
+  const axiosPrivate = useAxiosPrivate();
+
+  useEffect(() => {
+    const fetchAnalyses = async () => {
+      try {
+        const response = await axiosPrivate.get(`/api/response/analysis/${mockInterviewId}`);
+        setAnalyses(response.data);
+      } catch (error) {
+        console.error('Error fetching analyses:', error);
+      }
+    };
+
+    fetchAnalyses();
+  }, []);
+
   // Sample interview history data - in a real app, this would come from your backend
   const interviewHistory = [
     {
@@ -115,7 +131,41 @@ const Progress = () => {
           ))}
         </div>
       </div>
+
+      {/* Add Analysis Section */}
+      <div className="mt-8 bg-white rounded-lg shadow-md overflow-hidden">
+        <div className="px-6 py-4 border-b border-gray-200">
+          <h2 className="text-xl font-semibold">Response Analyses</h2>
+        </div>
+        <div className="divide-y divide-gray-200">
+          {analyses.map((analysis) => (
+            <div key={analysis._id} className="p-6">
+              <div className="grid grid-cols-2 gap-4 mb-4">
+                <div className="text-sm text-gray-600">
+                  <p>Grammar Score: {analysis.analysis.grammarScore}</p>
+                  <p>Coherence Score: {analysis.analysis.coherenceScore}</p>
+                  <p>Relevance Score: {analysis.analysis.relevanceScore}</p>
+                </div>
+                <div className="text-sm text-gray-600">
+                  <p>Speaking Skills: {analysis.analysis.transcriptAnalysis.speakingSkills}</p>
+                  <p>Confidence: {analysis.analysis.transcriptAnalysis.confidence}</p>
+                  <p>Overall Score: {analysis.analysis.transcriptAnalysis.overallScore}</p>
+                </div>
+              </div>
+              <div className="mt-4">
+                <h4 className="font-medium mb-2">Feedback:</h4>
+                <ul className="list-disc pl-5">
+                  {analysis.analysis.transcriptAnalysis.feedback.map((item, index) => (
+                    <li key={index} className="text-sm text-gray-600">{item}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 };
-export default Progress
+
+export default Progress;

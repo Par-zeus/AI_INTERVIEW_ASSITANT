@@ -12,6 +12,3 @@ const Layout = ({ children }) => (
 );
 
 export default Layout;
-//  icon="🎯"
-  // icon="🤖"
-  //  icon="📊"
