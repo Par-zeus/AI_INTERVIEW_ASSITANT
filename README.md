@@ -83,7 +83,7 @@ Team members: **Parth Das**, Nilay Rathod, Neeharika Bhaide, Pooja Divekar
 
 ## 📎 Links
 
-- 📁 [Project Report (PDF)]([link-to-pdf-if-you-want](https://drive.google.com/file/d/1JR39AV-MCvJZoP-xyLWhMkv2_Y65ATTJ/view?usp=sharing))
+- 📁 [Project Report (PDF)]([(https://drive.google.com/file/d/1JR39AV-MCvJZoP-xyLWhMkv2_Y65ATTJ/view?usp=sharing)])
 
 ---
 
