@@ -1,4 +1,4 @@
-# 🧠 AI Interview Assistant
+  # 🧠 AI Interview Assistant
 
 A web-based AI-powered platform that simulates real interview experiences using NLP, video analysis, and interactive dashboards. Designed to help students and job seekers prepare confidently for interviews while giving employers a data-driven screening tool.
 
@@ -10,7 +10,7 @@ A web-based AI-powered platform that simulates real interview experiences using 
 
 ### 🎤 Interview Simulation
 - Conduct mock interviews tailored to specific job roles and industries.
-- Includes behavioral, situational, and technical question categories.
+- Includes Easy, Medium, and Hard technical question categories.
 
 ### 🧠 AI Feedback Engine
 - Uses **Natural Language Processing (NLP)** to analyze verbal responses.
@@ -41,7 +41,7 @@ A web-based AI-powered platform that simulates real interview experiences using 
 
 - ✅ Led the effort to gather diverse, relevant interview questions and answers using 
   - **ChatGPT**, **Reddit threads**, and **industry-specific resources**
-  - Organized and labeled questions into categories (technical, behavioral, situational)
+  - Organized and labeled questions into categories Easy, Medium, Hard)
 
 - ✅ Co-developed the **emotion detection model** using a CNN architecture
   - Trained the model on labeled facial emotion datasets
